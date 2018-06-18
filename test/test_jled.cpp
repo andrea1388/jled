@@ -169,7 +169,7 @@ TEST_CASE("brightness functions calculate correct values", "[jled]") {
   TestableJLed::test();
 }
 
-TEST_CASE("EvalBrightness()", "[jled]") {
+TEST_CASE("EvalBrightness() calls userFunc properly", "[jled]") {
   class TestableJLed : public JLed {
     using JLed::JLed;
 
@@ -221,8 +221,7 @@ TEST_CASE("dont evalute twice during one time tick", "[jled]") {
     return 0;
   };
 
-  JLed jled(1);
-  jled.UserFunc(func, 1000, 0);
+  JLed jled = JLed(1).UserFunc(func, 1000, 0);
   num_times_called = 0;
   arduinoMockSetMillis(0);
 
@@ -344,4 +343,23 @@ TEST_CASE("user provided brightness function", "[jled]") {
     arduinoMockSetMillis(++time);
   }
   jled.Update();
+}
+
+TEST_CASE("Update on array calls Update() on all JLed objects", "[jled]") {
+  constexpr auto kTestPin1 = 1;
+  constexpr auto kTestPin2 = 2;
+
+  arduinoMockInit();
+
+  JLed *leds[] = {&JLed(kTestPin1).On(), &JLed(kTestPin2).On()};
+
+  // initially off
+  REQUIRE(arduinoMockGetPinState(kTestPin1) == 0);
+  REQUIRE(arduinoMockGetPinState(kTestPin2) == 0);
+
+  JLed::Update(leds);
+
+  // now  expected to be on
+  REQUIRE(arduinoMockGetPinState(kTestPin1) == 255);
+  REQUIRE(arduinoMockGetPinState(kTestPin2) == 255);
 }

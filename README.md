@@ -51,6 +51,7 @@ void loop() {
     * [PlatformIO](#platformio-1)
     * [Arduino IDE](#arduino-ide-1)
 * [Unit tests](#unit-tests)
+* [Contribute](#contribute)
 * [Author](#author)
 * [License](#license)
 
@@ -58,7 +59,7 @@ void loop() {
 
 ## Features
 
-* non-blocking
+* non-blocking, easily integrates in main loop()
 * simple on/off
 * breathe effect
 * blinking effect
@@ -91,13 +92,18 @@ lib_deps=jled
 
 ## Usage
 
-First the LED object is constructed and configured, then the state is updated
-with subsequent calls to the `Update()` method, typically from the `loop()`
-function. The constructor takes the pin, to which the LED is connected to as
-only parameter. Further configuration of the LED object is done using a fluent
-interface, e.g. `JLed led = JLed(13).Breathe(2000).DelayAfter(1000).Repeat(5)`.
-See examples and [Parameter overview](#parameter-oveview) section below for
-further details.
+First the LED object is constructed and configured. The `JLed` constructor
+takes the number of the pin, to which the LED is connected to, as only
+parameter. 
+
+Further configuration of the LED object is done using a fluent interface, e.g.
+`JLed led = JLed(13).Breathe(2000).DelayAfter(1000).Repeat(5)`.  See examples
+and [Parameter overview](#parameter-oveview) section below for further details.
+
+The state is updated with subsequent calls to the `Update()` method,
+typically from the `loop()` function. If you want to update multiple JLed
+object simulatanously, use the static `JLed::Update()` function, which takes an
+array of JLed pointers.
 
 ### Static on
 
@@ -267,6 +273,10 @@ the `File` > `Examples` > `JLed` menu.
 
 Info on how to run the host based provided unit tests 
 [is provided here](test/README.md).
+
+## Contribute
+
+See [CONTRIBUTE.md](CONTRIBUTE.md).
 
 ## Author
 

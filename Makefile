@@ -21,8 +21,8 @@ ci:
 	platformio ci  examples/multiled/multiled.ino $(CIOPTS)
 
 clean:
-	pio run --target clean
-	rm -f {test,src}/{*.o,*.gcno,*.gcda}
+	pio run --target clean || true
+	rm -f {test,src}/{*.o,*.gcno,*.gcda} test/test_jled test/coverage.info
 
 upload:
 	pio run --target upload 
@@ -30,8 +30,11 @@ upload:
 monitor:
 	pio device monitor 
 
-test:
+coverage: test
 	$(MAKE) -C test coverage
+
+test:
+	$(MAKE) -C test test
 
 tags:
 	ctags -R
