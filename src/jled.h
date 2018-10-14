@@ -42,7 +42,9 @@ class TJLed {
     // given point in time and the given period. param is an optionally user
     // provided parameter. t will always be in range [0..period-1].
     // f(period-1,period,param) will be called last to calculate the final
-    // state of the LED.
+    // state of the LED. We use simple function pointers intentionally
+    // as otherwise vitual functions and dynamic memory management would
+    // be needed - but this may change some day ;)
     using BrightnessEvalFunction = uint8_t (*)(uint32_t t, uint16_t period,
                                                uintptr_t param);
 
@@ -79,6 +81,7 @@ class TJLed {
         last_update_time_ = now;
 
         if (now < time_start_) {
+            // not yet started - still in delay before phase
             return true;
         }
 
