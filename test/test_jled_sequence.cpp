@@ -18,7 +18,7 @@ TEST_CASE("simple sequence performs all updates", "[jled_sequence]") {
     constexpr uint8_t expected[] = {255,  // first led
                                     0,
                                     0,   // second led
-                                    255, 
+                                    255,
                                     255};  // final state
 
     uint32_t time = 0;

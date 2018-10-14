@@ -14,7 +14,6 @@ TEST_CASE("jled ctor set pin mode to OUTPUT", "[jled]") {
     REQUIRE(arduinoMockGetPinMode(kTestPin) == OUTPUT);
 }
 
-
 TEST_CASE("On/Off function configuration", "[jled]") {
     class TestableJLed : public JLed {
      public:
@@ -213,7 +212,7 @@ TEST_CASE("stop effect stops the effect", "[jled]") {
     arduinoMockInit();
 
     // we test that an effect that normally has high ouput for a longer
-    // time (e.g. FadeOff()) stays off after Stop() was called. 
+    // time (e.g. FadeOff()) stays off after Stop() was called.
     JLed jled = JLed(kTestPin).FadeOff(kDuration);
     REQUIRE(!jled.IsStopped());
     jled.Update();
@@ -250,9 +249,9 @@ TEST_CASE("blink led twice with delay and repeat", "[jled]") {
         /* delay before 5ms */ 0, 0, 0, 0, 0,
         /* 1ms on */ 255,
         /* 2ms off */ 0,          0,
-        /* 2ms delay */ 0, 0,
+        /* 2ms delay */ 0,        0,
         /* repeat */ 255,         0, 0, 0, 0,
-        /* finally stay off */ 0, 0 };
+        /* finally stay off */ 0, 0};
     uint32_t time = 0;
     for (const auto val : expected) {
         jled.Update();
@@ -313,7 +312,7 @@ TEST_CASE("Update returns true while updating, else false", "[jled]") {
     constexpr auto expectedTime = 2 + 3;
 
     uint32_t time = 0;
-    for (auto i = 0; i < expectedTime-1; i++) {
+    for (auto i = 0; i < expectedTime - 1; i++) {
         // returns FALSE on last step and beyond, else TRUE
         arduinoMockSetMillis(time++);
         auto res = jled.Update();

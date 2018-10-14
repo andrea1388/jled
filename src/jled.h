@@ -49,8 +49,8 @@ class TJLed {
                                                uintptr_t param);
 
     TJLed() = delete;
-    TJLed(const PortType& port) : port_(port) {}
-    TJLed(uint8_t pin) : port_(PortType(pin)) {}
+    explicit TJLed(const PortType& port) : port_(port) {}
+    explicit TJLed(uint8_t pin) : port_(PortType(pin)) {}
 
     // update brightness of LED using the given brightness function
     //  (brightness)                     _________________
@@ -213,7 +213,6 @@ class TJLed {
     }
 
  protected:
-
     // internal control of the LED, does not affect
     // state and honors low_active_ flag
     void AnalogWrite(uint8_t val) {
@@ -239,7 +238,9 @@ class TJLed {
     bool GetFlag(uint8_t f) const { return (flags_ & f) != 0; }
 
     void SetInDelayAfterPhase(bool f) { SetFlags(FL_IN_DELAY_AFTER_PHASE, f); }
-    bool IsInDelayAfterPhase() const { return GetFlag(FL_IN_DELAY_AFTER_PHASE); }
+    bool IsInDelayAfterPhase() const {
+        return GetFlag(FL_IN_DELAY_AFTER_PHASE);
+    }
 
     uint8_t EvalBrightness(uint32_t t) const {
         const auto val = brightness_func_(t, period_, effect_param_);
@@ -300,6 +301,8 @@ class TJLed {
     }
 
     BrightnessEvalFunction brightness_func_ = nullptr;
+
+
  private:
     // pre-calculated fade-on function. This table samples the function
     //   y(x) =  exp(sin((t - period / 2.) * PI / period)) - 0.36787944) * 108.
